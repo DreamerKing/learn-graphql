@@ -44,7 +44,7 @@ server.applyMiddleware({ app });
 // app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
 // app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql'}));
 
-app.listen({ port: 4000 }, ()=> console.log("Now server to localhost:8080/graphql"));
+app.listen({ port: 5000 },  ()=> console.log(`Now server to ${app.port}`));
 
 /* graphql(schema, '{hello}', root).then((response) => {
     console.log(response);
