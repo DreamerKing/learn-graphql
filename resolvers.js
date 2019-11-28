@@ -2,46 +2,6 @@ const { GraphQLScalarType } = require("graphql");
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
-const photos = [
-  {
-    id: "1",
-    name: "Dropping the heart",
-    description: "jjdd",
-    category: "ACTION",
-    githubUser: "king",
-    created: "10-12-2019"
-  },
-  {
-    id: "2",
-    name: "Dropping  3the heart",
-    description: "jjdd",
-    category: "ACTION",
-    githubUser: "king2",
-    created: "9-10-2019"
-  }
-];
-const users = [
-  {
-    githubUser: "king",
-    name: "dreamer"
-  },
-  {
-    githubUser: "king2",
-    name: "dreamer2"
-  }
-];
-
-const tags = [
-  {
-    photoID: "1",
-    userID: "king"
-  },
-  {
-    photoID: "1",
-    userID: "king2"
-  }
-];
-
 const requestGithubToken = credentials => 
   fetch("https://github.com/login/oauth/access_token", {
     method: "POST",
@@ -51,14 +11,20 @@ const requestGithubToken = credentials =>
     },
     body: JSON.stringify(credentials)
   })
-    .then(res => res.json());
+    .then(res => res.json())
+    .catch(err => {
+      throw new Error(JSON.stringify(err));
+    });
 
 const requestGithubUserAccount = token =>
   fetch(`https://api.github.com/user?access_token=${token}`)
-    .then(res => res.json());
+    .then(res => res.json())
+    .catch((err) => {
+       throw new Error(JSON.stringify(err));
+    });
 
 const authorizeWithGithub = async credentials => {
-    console.log("credentials:", credentials);   
+  console.log("credentials:", credentials);   
   const { access_token } = await requestGithubToken(credentials);
   console.log("access_token:", access_token);
   
@@ -66,21 +32,19 @@ const authorizeWithGithub = async credentials => {
   return { ...githubUser, access_token };
 }
 
-let _id = 0;
+
 const resolvers = {
   Query: {
     totalPhotos: (parent, args, { db }) =>
       db.collection("photos").estimatedDocumentCount(),
     allPhotos: (parent, args, { db }) =>
-      db
-        .collection("photos")
+      db.collection("photos")
         .find()
         .toArray(),
     totalUsers: (parent, args, { db }) =>
       db.collection("users").estimatedDocumentCount(),
     allUsers: (parent, args, { db }) =>
-      db
-        .collection("users")
+      db.collection("users")
         .find()
         .toArray(),
     me: (parent, args, { currentUser }) => currentUser
@@ -96,8 +60,6 @@ const resolvers = {
             avatar: r.picture.thumbnail,
             githubToken: r.login.sha1
          }));
-         console.log("results ->:", results);
-         
          await db.collection('users').insert(users);
          return users;
     },
@@ -116,7 +78,6 @@ const resolvers = {
             throw new Error('only an authorized user can post a photo');
         }
       let newPhoto = {
-        id: _id++,
         ...args.input,
         userID: currentUser.githubLogin,
         created: new Date()
@@ -124,7 +85,6 @@ const resolvers = {
       const { insertedIds } = await db.collection('photos')
         .insert(newPhoto);
         newPhoto.id = insertedIds[0];
-    //   photos.push(newPhoto);
       return newPhoto;
     },
     async githubAuth(parent, { code }, { db }) {
@@ -156,8 +116,6 @@ const resolvers = {
       } = await db
         .collection("users")
         .replaceOne({ githubLogin: login }, latestUserInfo, { upsert: true });
-       // console.log(user, access_token, ">>>", latestUserInfo);
-        
       return { user, token: access_token };
     }
   },
@@ -192,32 +150,5 @@ const resolvers = {
     parseLiteral: ast => ast.value
   })
 };
-
-/* async function githubAuth(parent, { code }, { db }) {
-    let {
-        message,
-        access_token,
-        avatar_url,
-        login,
-        name
-    } = await authorizeWithGithub({
-        client_id: "cbb0d4f8112f91373ca5",
-        client_secrect: "5ea37bd3dbe2557a2a9c8c7e05fdfb8ed2c2fca0",
-        code
-    });
-    if(message) {
-        throw new Error(message);
-    }
-
-    let latestUserInfo = {
-        name,
-        githubLogin: login,
-        githubToken: access_token,
-        avatar: avatar_url
-    };
-
-    const { ops: [ user ]} = await db.collection('users').replaceOne({ githubLogin: login }, latestUserInfo, { upsert: true});
-    return { user, token: access_token };
-} */
 
 module.exports = resolvers;

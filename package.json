@@ -7,7 +7,9 @@
     "start": "nodemon hello.js",
     "apollo": "nodemon apollo.js",
     "spa": "nodemon share-photo-app.js",
-    "spea": "nodemon -e js,graphql share-photo-express-app.js"
+    "spea": "nodemon -e js,graphql share-photo-express-app.js",
+    "starte": "nodemon server.js",
+    "eg": "nodemon express-graphql.js"
   },
   "keywords": [],
   "author": "",
@@ -18,7 +20,7 @@
     "body-parser": "^1.18.3",
     "dotenv": "^8.2.0",
     "es6-promise": "^4.2.8",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "express-graphql": "^0.8.0",
     "graphql": "^14.2.1",
     "graphql-playground-middleware-express": "^1.7.12",

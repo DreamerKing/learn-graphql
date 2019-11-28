@@ -1,11 +1,20 @@
-  scalar DateTime
+    enum PhotoCategory {
+      SELFIE
+      PORTRAIT
+      ACTION
+      LANDSPACE
+      GRAPHIC
+    }
+
+    scalar DateTime
+
     type Photo {
         id: ID!
         url: String!
         name: String!
         description: String,
         category: PhotoCategory!
-        created: DateTime
+        created: DateTime!
         postedBy: User!
         taggedUsers: [User!]!
     }
@@ -29,15 +38,9 @@
         name: String!
         category: PhotoCategory=PORTRAIT
         description: String
+        # postedBy: User!
     }
 
-    enum PhotoCategory {
-        SELFIE
-        PORTRAIT
-        ACTION
-        LANDSPACE
-        GRAPHIC
-    }
 
     type Query {
         totalPhotos: Int!

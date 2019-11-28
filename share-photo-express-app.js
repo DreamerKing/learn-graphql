@@ -1,6 +1,5 @@
 
-const { ApolloServer, gql } = require('apollo-server-express');
-const { GraphQLScalarType } = require('graphql');
+const { ApolloServer } = require('apollo-server-express');
 const express = require("express");
 const { MongoClient } = require('mongodb');
 const expressPlayground = require('graphql-playground-middleware-express').default;
@@ -20,28 +19,27 @@ async function start() {
         }
     );
 
-    const db = client.db();
-    db.collection("photos").find({}).toArray((err, docs) => {
-        console.log("docs:", docs);
-    }) 
+    const db = client.db("test");
+    // db.collection("photos").find({}).toArray((err, docs) => {
+    //     console.log("docs:", docs);
+    // }) 
 
     const server = new ApolloServer({
         typeDefs,
         resolvers,
         context: async ({ req }) => {
             const githubToken = req.headers.authorization;
-            console.log("githubToken:", githubToken);
-            const currentUser = await db.collection('users').findOne({ githubToken });
-            console.log("current:", currentUser);
-            
+            // console.log("githubToken2:", githubToken);
+            const currentUser = await db.collection('users')
+                                        .findOne({ githubToken });
+            // console.log("current:", currentUser);   
             return { db, currentUser }
         }
     });
-
     server.applyMiddleware({ app });
-    app.get('/', (req, res) => res.end("Welcome to the photoshare api"));
-    app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
-    app.listen({ port: 4000}, () => console.log(`GraphQL service is running on http://localhost:4000/${server.graphqlPath}` ));
+    app.get('/', (req, res) => res.end("Hello graphql"));
+    app.get('/playground', expressPlayground({ endpoint: '/graphql' }));
+    app.listen({ port: 4000}, () => console.log(`GraphQL service is running on http://localhost:4000${server.graphqlPath}` ));
 }
 
 try {

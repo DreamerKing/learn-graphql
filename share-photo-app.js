@@ -4,6 +4,7 @@ const { GraphQLScalarType } = require('graphql');
 const serialize = value => new Date(value).toISOString();
 const parseValue = value => new Date(value);
 const parseLiteral = ast => ast.value;
+
 const typeDefs =gql `
     scalar DateTime
     type Photo {
@@ -13,7 +14,7 @@ const typeDefs =gql `
         description: String,
         category: PhotoCategory!
         created: DateTime
-        postedBy: User!
+        postedBy: User
         taggedUsers: [User!]!
     }
     type User {
