@@ -20,7 +20,7 @@
     "body-parser": "^1.18.3",
     "dotenv": "^8.2.0",
     "es6-promise": "^4.2.8",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-graphql": "^0.8.0",
     "graphql": "^14.2.1",
     "graphql-playground-middleware-express": "^1.7.12",
