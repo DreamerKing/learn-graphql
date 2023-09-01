@@ -1,32 +1,42 @@
 {
   "name": "@d6k/learn-graphql",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
-  "main": "hello.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "nodemon hello.js",
-    "apollo": "nodemon apollo.js",
-    "spa": "nodemon share-photo-app.js",
-    "spea": "nodemon -e js,graphql share-photo-express-app.js",
-    "starte": "nodemon server.js",
-    "eg": "nodemon express-graphql.js"
+    "start": "nodemon --exec ts-node  src/index.ts",
+    "prod": "yarn compile && NODE_OPTIONS=--experimental-specifier-resolution=node node ./dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "compile": "yarn codegen && tsc",
+    "migrate": "yarn prisma migrate diff --from-empty --to-schema-datamodel  prisma/schema.prisma --script > prisma/migrations/0_init/migration.sql",
+    "codegen": "graphql-codegen --config codegen.ts"
   },
   "keywords": [],
-  "author": "",
+  "author": "Dreamer King",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "^2.9.6",
-    "apollo-server-express": "^2.4.8",
-    "body-parser": "^1.18.3",
-    "dotenv": "^8.2.0",
-    "es6-promise": "^4.2.8",
-    "express": "^4.17.1",
-    "express-graphql": "^0.8.0",
-    "graphql": "^14.2.1",
-    "graphql-playground-middleware-express": "^1.7.12",
-    "graphql-tools": "^4.0.4",
-    "graphql-type-json": "^0.3.0",
-    "isomorphic-fetch": "^2.2.1",
-    "mongodb": "^3.3.3"
+    "@apollo/datasource-rest": "^5.1.1",
+    "@apollo/gateway": "^2.4.2",
+    "@apollo/server": "^4.7.0",
+    "@apollo/subgraph": "^2.4.2",
+    "@prisma/client": "4.13.0",
+    "graphql": "^16.6.0",
+    "graphql-tag": "^2.12.6"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "3.3.1",
+    "@graphql-codegen/introspection": "3.0.1",
+    "@graphql-codegen/typescript": "3.0.4",
+    "@graphql-codegen/typescript-resolvers": "3.2.1",
+    "@graphql-tools/mock": "^8.7.20",
+    "@graphql-tools/schema": "^9.0.19",
+    "@types/node": "^18.16.3",
+    "casual": "^1.6.2",
+    "nodemon": "^2.0.22",
+    "prisma": "^4.13.0",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.4"
   }
 }
