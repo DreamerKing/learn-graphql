@@ -6,7 +6,7 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { addMocksToSchema } from "@graphql-tools/mock";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-
+import "dotenv/config";
 import resolvers from "./resolvers";
 import { context, MyContext } from "./context";
 
@@ -17,14 +17,14 @@ const typeDefs = readFileSync(join(__dirname, "./schema.graphql"), {
 });
 
 const server = new ApolloServer<MyContext>({
-  schema: addMocksToSchema({
+  /* schema: addMocksToSchema({
     schema: makeExecutableSchema({
       typeDefs,
       resolvers,
     }),
-  }),
-  // typeDefs,
-  // resolvers,
+  }), */
+  typeDefs,
+  resolvers,
 });
 
 const { url } = await startStandaloneServer(server, {

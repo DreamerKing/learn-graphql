@@ -11,7 +11,7 @@ const config: CodegenConfig = {
         contextType: "../context#MyContext",
       },
     },
-    "./graphql.schema.json": {
+    "src/generated/graphql.schema.json": {
       plugins: ["introspection"],
     },
   },

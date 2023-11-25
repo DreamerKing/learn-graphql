@@ -8,19 +8,59 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
+  id       Int    @id @default(autoincrement())
+  email    String?
   password String
-  name     String?
-  Post     Post[]
+  phone    String
+  name     String
+  roles Role[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt @default(now())
 }
 
-model Post {
-  id       Int     @id @default(autoincrement())
-  title    String
-  content  String?
-  authorId Int
-  User     User    @relation(fields: [authorId], references: [id])
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String
+  permissions Permission[]
+  userId  Int?
+  user     User?  @relation(fields: [userId], references: [id])
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt @default(now())
+}
 
-  @@index([authorId], map: "Post_authorId_fkey")
+model Permission {
+  id     Int    @id @default(autoincrement())
+  name   String
+  roleId Int
+  role   Role   @relation(fields: [roleId], references: [id])
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt @default(now())
+}
+
+model Goods {
+  id    Int    @id @default(autoincrement())
+  name  String
+  price Float
+  categories Category[]
+  images Picture[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt @default(now())
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String
+  goods Goods[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt @default(now())
+}
+
+model Picture {
+  id Int @id @default(autoincrement())
+  name String
+  url String
+  goodsId Int
+  goods Goods @relation(fields: [goodsId], references: [id])
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt @default(now())
 }

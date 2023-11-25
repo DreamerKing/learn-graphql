@@ -5,11 +5,11 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start": "nodemon --exec ts-node  src/index.ts",
-    "prod": "yarn compile && NODE_OPTIONS=--experimental-specifier-resolution=node node ./dist/index.js",
-    "dev": "ts-node src/index.ts",
-    "compile": "yarn codegen && tsc",
-    "migrate": "yarn prisma migrate diff --from-empty --to-schema-datamodel  prisma/schema.prisma --script > prisma/migrations/0_init/migration.sql",
+    "start": "nodemon --exec ts-node -r tsconfig-paths/register  src/index.ts",
+    "prod": "pnpm compile && NODE_OPTIONS=--experimental-specifier-resolution=node node ./dist/index.js",
+    "dev": "ts-node  src/index.ts",
+    "compile": "pnpm codegen && tsc",
+    "migrate": "pnpm prisma migrate diff --from-empty --to-schema-datamodel  prisma/schema.prisma --script > prisma/migrations/0_init/migration.sql",
     "codegen": "graphql-codegen --config codegen.ts"
   },
   "keywords": [],
@@ -20,9 +20,11 @@
     "@apollo/gateway": "^2.4.2",
     "@apollo/server": "^4.7.0",
     "@apollo/subgraph": "^2.4.2",
-    "@prisma/client": "4.13.0",
+    "@prisma/client": "5.6.0",
+    "dotenv": "^16.3.1",
     "graphql": "^16.6.0",
-    "graphql-tag": "^2.12.6"
+    "graphql-tag": "^2.12.6",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "3.3.1",
@@ -31,12 +33,14 @@
     "@graphql-codegen/typescript-resolvers": "3.2.1",
     "@graphql-tools/mock": "^8.7.20",
     "@graphql-tools/schema": "^9.0.19",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^18.16.3",
     "casual": "^1.6.2",
     "nodemon": "^2.0.22",
-    "prisma": "^4.13.0",
+    "prisma": "^5.6.0",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.4"
   }
 }

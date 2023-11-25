@@ -9,7 +9,7 @@ export default {
   },
   service: {
     name: "king",
-    localSchemaFile: "./schema.graphql",
+    localSchemaFile: "src/schema.graphql",
     endpoint: {
       url: "http://localhost:4000/graphql",
       headers: {

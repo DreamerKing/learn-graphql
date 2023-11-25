@@ -1,38 +1,23 @@
-  scalar Date
-  type Book {
-    title : String
-    author : Author
-  }
-  type Author {
-    name : String
-    books: [Book]
-  }
-  type User {
+scalar Date
+"用户信息"
+type User {
     id: String
-    name : String
+    name: String
     email: String
     password: String
-    posts: [Post]
-  }
-  type Post {
-    id: String
-    title : String
-    content: String
-    author: User
-  }
+    phone: String
+}
+
+
   type Query {
-    books : [Book]
     users : [User]
-    # events: [Event!]!
   }
 
   type Mutation {
+    "添加用户"
     addUser(user: UserInput): User
-  }
-
-  type Event {
-    id: ID!
-    date: Date!
+    "登录"
+    login(loginParam: LoginInput): LoginResponse
   }
 
 input UserInput {
@@ -40,3 +25,14 @@ input UserInput {
     email: String
     password: String
   }
+
+input LoginInput {
+  name: String
+  password: String
+}
+
+type LoginResponse {
+  token: String
+  message: String
+  code: Int
+}

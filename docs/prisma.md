@@ -9,3 +9,8 @@ node 运行 esm 选项
 ```bash
 NODE_OPTIONS=--experimental-specifier-resolution=node
 ```
+
+```bash
+pnpm install prisma --save-dev // 作为开发依赖安装
+pnpm dlx prisma  // 查看文档
+```

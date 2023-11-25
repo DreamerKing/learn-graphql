@@ -1,26 +1,18 @@
 import { PrismaClient } from "@prisma/client";
+import { IncomingMessage, ServerResponse } from "http";
 
 const client = new PrismaClient();
-
-const books = [
-  {
-    title: "The Awakening",
-    author: "Kate Chopin",
-  },
-  {
-    title: "City of Glass",
-    author: "Paul Auster",
-  },
-];
 
 export interface MyContext {
   token?: string;
   prisma: PrismaClient;
-  books: any[];
 }
 
-export const context = async ({ req }: any) => ({
-  token: req.headers.token,
-  prisma: client,
-  books,
-});
+export const context = async ({ req, res }: {req: IncomingMessage, res: ServerResponse }) => {
+  const token = req.headers.authorization || '';
+    // console.log(token, 'token context');
+  return {
+    token,
+    prisma: client,
+  }
+};

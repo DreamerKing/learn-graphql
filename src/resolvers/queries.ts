@@ -3,11 +3,17 @@ import { MyContext } from "../context";
 
 const queries: QueryResolvers = {
   Query: {
-    books(root: any, args: any, { books }: MyContext) {
-      return books;
-    },
-    async users(parent: any, args: any, { prisma }: MyContext) {
-      return await prisma.user.findMany();
+    async users(parent: any, args: any, { prisma, token }: MyContext) {
+      console.log('token:', token )
+      return await prisma.user.findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          password: false
+        }
+      });
     },
   },
 };
